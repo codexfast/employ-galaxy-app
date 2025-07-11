@@ -1,66 +1,158 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Briefcase, Mail, Lock, Eye, EyeOff, User, Building, MapPin, Globe, Phone } from 'lucide-react';
+import { Briefcase, Mail, Lock, Eye, EyeOff, User, Building } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { useLanguage } from '@/hooks/useLanguage';
+import { useAuth } from '@/hooks/useAuth';
+import { LanguageSelector } from '@/components/LanguageSelector';
+
+type UserType = 'candidate' | 'company';
 
 const Registro = () => {
+  const { t } = useLanguage();
+  const { register, loading } = useAuth();
+  
+  const [userType, setUserType] = useState<UserType | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // Estados para empresa
-  const [empresaData, setEmpresaData] = useState({
-    nomeEmpresa: '',
-    endereco: '',
-    setorAtuacao: '',
-    nomeResponsavel: '',
+  
+  const [formData, setFormData] = useState({
     email: '',
-    telefone: '',
-    website: '',
-    senha: '',
-    confirmarSenha: ''
+    password: '',
+    confirmPassword: '',
+    fullName: '',
+    companyName: '',
+    responsibleName: ''
   });
 
-  const setoresAtuacao = [
-    'TI',
-    'Varejo',
-    'Construção',
-    'Manufatura',
-    'Serviços',
-    'Educação',
-    'Saúde',
-    'Turismo',
-    'Alimentação',
-    'Logística',
-    'Outros'
-  ];
-
-  const handleEmpresaSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Registro empresa:', empresaData);
+    
+    if (!userType) return;
+    
+    if (formData.password !== formData.confirmPassword) {
+      alert('As senhas não coincidem');
+      return;
+    }
+
+    const success = await register({
+      email: formData.email,
+      password: formData.password,
+      userType,
+      fullName: userType === 'candidate' ? formData.fullName : undefined,
+      companyName: userType === 'company' ? formData.companyName : undefined,
+      responsibleName: userType === 'company' ? formData.responsibleName : undefined,
+    });
+
+    if (success) {
+      setFormData({
+        email: '',
+        password: '',
+        confirmPassword: '',
+        fullName: '',
+        companyName: '',
+        responsibleName: ''
+      });
+    }
   };
+
+  if (!userType) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-lg">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-8">
+            <Link to="/" className="inline-flex items-center space-x-2">
+              <Briefcase className="h-8 w-8 text-blue-600" />
+              <span className="text-2xl font-bold text-gray-900">JobConnect</span>
+            </Link>
+            <LanguageSelector />
+          </div>
+
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('register.title')}</h1>
+            <p className="text-gray-600">{t('register.subtitle')}</p>
+          </div>
+
+          {/* User Type Selection */}
+          <div className="space-y-4">
+            <button
+              onClick={() => setUserType('candidate')}
+              className="w-full p-6 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 text-left"
+            >
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <User className="h-6 w-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">{t('userType.candidate')}</h3>
+                  <p className="text-gray-600">{t('userType.candidateDesc')}</p>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setUserType('company')}
+              className="w-full p-6 border-2 border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-all duration-200 text-left"
+            >
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-green-100 rounded-lg">
+                  <Building className="h-6 w-6 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">{t('userType.company')}</h3>
+                  <p className="text-gray-600">{t('userType.companyDesc')}</p>
+                </div>
+              </div>
+            </button>
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
+              {t('button.backToHome')}
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-lg">
         {/* Header */}
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-2 mb-6">
+        <div className="flex justify-between items-center mb-8">
+          <Link to="/" className="inline-flex items-center space-x-2">
             <Briefcase className="h-8 w-8 text-blue-600" />
             <span className="text-2xl font-bold text-gray-900">JobConnect</span>
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Cadastro de Empresa</h1>
-          <p className="text-gray-600">Registre sua empresa japonesa e encontre os melhores talentos</p>
+          <LanguageSelector />
+        </div>
+
+        <div className="text-center mb-8">
+          <button
+            onClick={() => setUserType(null)}
+            className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-4"
+          >
+            ← Voltar
+          </button>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('register.title')}</h1>
+          <p className="text-gray-600">
+            {userType === 'candidate' ? t('userType.candidateDesc') : t('userType.companyDesc')}
+          </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Informações da Empresa</CardTitle>
+            <CardTitle>
+              {userType === 'candidate' ? 'Cadastro de Candidato' : 'Cadastro de Empresa'}
+            </CardTitle>
             <CardDescription>
-              Preencha os dados da sua empresa para começar
+              Preencha os dados básicos para criar sua conta
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -73,14 +165,14 @@ const Registro = () => {
                   <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                   <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
-                Continuar com Google
+                {t('social.continueWithGoogle')}
               </Button>
               
               <Button variant="outline" className="w-full" type="button">
                 <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
-                Continuar com Facebook
+                {t('social.continueWithFacebook')}
               </Button>
             </div>
 
@@ -89,214 +181,135 @@ const Registro = () => {
                 <Separator />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-500">ou</span>
+                <span className="bg-white px-2 text-gray-500">{t('social.or')}</span>
               </div>
             </div>
 
-            <form onSubmit={handleEmpresaSubmit} className="space-y-6">
-              {/* Informações da Empresa */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900">1. Informações da Empresa</h3>
-                
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {userType === 'candidate' ? (
                 <div className="space-y-2">
-                  <label htmlFor="nome-empresa" className="text-sm font-medium text-gray-700">
-                    Nome da empresa *
-                  </label>
-                  <div className="relative">
-                    <Building className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="nome-empresa"
-                      type="text"
-                      placeholder="Nome da sua empresa"
-                      value={empresaData.nomeEmpresa}
-                      onChange={(e) => setEmpresaData({...empresaData, nomeEmpresa: e.target.value})}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="endereco" className="text-sm font-medium text-gray-700">
-                    Endereço (cidade/prefeitura) *
-                  </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="endereco"
-                      type="text"
-                      placeholder="ex: Tóquio, Osaka, Nagoya..."
-                      value={empresaData.endereco}
-                      onChange={(e) => setEmpresaData({...empresaData, endereco: e.target.value})}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="setor-atuacao" className="text-sm font-medium text-gray-700">
-                    Setor de atuação *
-                  </label>
-                  <div className="relative">
-                    <Briefcase className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <select
-                      id="setor-atuacao"
-                      value={empresaData.setorAtuacao}
-                      onChange={(e) => setEmpresaData({...empresaData, setorAtuacao: e.target.value})}
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pl-10 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      required
-                    >
-                      <option value="">Selecione o setor</option>
-                      {setoresAtuacao.map((setor) => (
-                        <option key={setor} value={setor}>{setor}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contato e Login */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900">2. Contato e Login</h3>
-                
-                <div className="space-y-2">
-                  <label htmlFor="nome-responsavel" className="text-sm font-medium text-gray-700">
-                    Nome do responsável *
+                  <label htmlFor="fullName" className="text-sm font-medium text-gray-700">
+                    {t('form.fullName')} *
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <Input
-                      id="nome-responsavel"
+                      id="fullName"
                       type="text"
-                      placeholder="Nome completo do responsável"
-                      value={empresaData.nomeResponsavel}
-                      onChange={(e) => setEmpresaData({...empresaData, nomeResponsavel: e.target.value})}
+                      placeholder={t('form.fullName')}
+                      value={formData.fullName}
+                      onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                       className="pl-10"
                       required
                     />
                   </div>
                 </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="email-empresa" className="text-sm font-medium text-gray-700">
-                    E-mail *
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="email-empresa"
-                      type="email"
-                      placeholder="contato@empresa.com"
-                      value={empresaData.email}
-                      onChange={(e) => setEmpresaData({...empresaData, email: e.target.value})}
-                      className="pl-10"
-                      required
-                    />
+              ) : (
+                <>
+                  <div className="space-y-2">
+                    <label htmlFor="companyName" className="text-sm font-medium text-gray-700">
+                      {t('form.companyName')} *
+                    </label>
+                    <div className="relative">
+                      <Building className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <Input
+                        id="companyName"
+                        type="text"
+                        placeholder={t('form.companyName')}
+                        value={formData.companyName}
+                        onChange={(e) => setFormData({...formData, companyName: e.target.value})}
+                        className="pl-10"
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="telefone" className="text-sm font-medium text-gray-700">
-                    Telefone
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="telefone"
-                      type="tel"
-                      placeholder="+81 XX-XXXX-XXXX"
-                      value={empresaData.telefone}
-                      onChange={(e) => setEmpresaData({...empresaData, telefone: e.target.value})}
-                      className="pl-10"
-                    />
+                  <div className="space-y-2">
+                    <label htmlFor="responsibleName" className="text-sm font-medium text-gray-700">
+                      {t('form.responsibleName')} *
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <Input
+                        id="responsibleName"
+                        type="text"
+                        placeholder={t('form.responsibleName')}
+                        value={formData.responsibleName}
+                        onChange={(e) => setFormData({...formData, responsibleName: e.target.value})}
+                        className="pl-10"
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
+                </>
+              )}
 
-                <div className="space-y-2">
-                  <label htmlFor="senha-empresa" className="text-sm font-medium text-gray-700">
-                    Senha *
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="senha-empresa"
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Mínimo 8 caracteres"
-                      value={empresaData.senha}
-                      onChange={(e) => setEmpresaData({...empresaData, senha: e.target.value})}
-                      className="pl-10 pr-10"
-                      minLength={8}
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
-                    >
-                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="confirmar-senha-empresa" className="text-sm font-medium text-gray-700">
-                    Confirmar senha *
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="confirmar-senha-empresa"
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      placeholder="Confirme sua senha"
-                      value={empresaData.confirmarSenha}
-                      onChange={(e) => setEmpresaData({...empresaData, confirmarSenha: e.target.value})}
-                      className="pl-10 pr-10"
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
-                    >
-                      {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    </button>
-                  </div>
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                  {t('form.email')} *
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder={t('form.email')}
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="pl-10"
+                    required
+                  />
                 </div>
               </div>
 
-              {/* Outros (opcional) */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900">3. Outros (opcional)</h3>
-                
-                <div className="space-y-2">
-                  <label htmlFor="website" className="text-sm font-medium text-gray-700">
-                    Website da empresa
-                  </label>
-                  <div className="relative">
-                    <Globe className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="website"
-                      type="url"
-                      placeholder="https://www.empresa.com"
-                      value={empresaData.website}
-                      onChange={(e) => setEmpresaData({...empresaData, website: e.target.value})}
-                      className="pl-10"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="logo" className="text-sm font-medium text-gray-700">
-                    Logo da empresa
-                  </label>
+              <div className="space-y-2">
+                <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                  {t('form.password')} *
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <Input
-                    id="logo"
-                    type="file"
-                    accept="image/*"
-                    className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Mínimo 8 caracteres"
+                    value={formData.password}
+                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    className="pl-10 pr-10"
+                    minLength={8}
+                    required
                   />
-                  <p className="text-xs text-gray-500">Formatos aceitos: JPG, PNG, SVG (máx. 2MB)</p>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+                  {t('form.confirmPassword')} *
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <Input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    placeholder={t('form.confirmPassword')}
+                    value={formData.confirmPassword}
+                    onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                    className="pl-10 pr-10"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
                 </div>
               </div>
 
@@ -304,27 +317,31 @@ const Registro = () => {
                 <label className="flex items-start space-x-2">
                   <input type="checkbox" className="rounded border-gray-300 mt-1" required />
                   <span className="text-gray-600">
-                    Concordo com os{' '}
+                    {t('terms.agree')}{' '}
                     <Link to="/termos" className="text-blue-600 hover:text-blue-700">
-                      termos de uso
+                      {t('terms.terms')}
                     </Link>{' '}
-                    e{' '}
+                    {t('terms.and')}{' '}
                     <Link to="/privacidade" className="text-blue-600 hover:text-blue-700">
-                      política de privacidade
+                      {t('terms.privacy')}
                     </Link>
                   </span>
                 </label>
               </div>
 
-              <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
-                Criar conta empresarial
+              <Button 
+                type="submit" 
+                className="w-full bg-blue-600 hover:bg-blue-700"
+                disabled={loading}
+              >
+                {loading ? 'Criando conta...' : t('button.register')}
               </Button>
             </form>
 
             <div className="text-center text-sm text-gray-600 mt-6">
-              Já tem uma conta?{' '}
+              {t('button.alreadyHaveAccount')}{' '}
               <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
-                Faça login
+                {t('button.login')}
               </Link>
             </div>
           </CardContent>
@@ -332,7 +349,7 @@ const Registro = () => {
 
         <div className="mt-8 text-center">
           <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
-            ← Voltar ao início
+            {t('button.backToHome')}
           </Link>
         </div>
       </div>
