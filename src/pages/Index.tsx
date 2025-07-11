@@ -6,8 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { LanguageSelector } from '@/components/LanguageSelector';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const Index = () => {
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const [location, setLocation] = useState('');
 
@@ -46,10 +49,10 @@ const Index = () => {
   ];
 
   const stats = [
-    { icon: Briefcase, label: 'Vagas Ativas', value: '1,234' },
-    { icon: Users, label: 'Candidatos', value: '5,678' },
-    { icon: Building, label: 'Empresas', value: '234' },
-    { icon: TrendingUp, label: 'Contratações', value: '892' }
+    { icon: Briefcase, label: t('stats.activeJobs'), value: '1,234' },
+    { icon: Users, label: t('stats.candidates'), value: '5,678' },
+    { icon: Building, label: t('stats.companies'), value: '234' },
+    { icon: TrendingUp, label: t('stats.hires'), value: '892' }
   ];
 
   return (
@@ -64,21 +67,22 @@ const Index = () => {
             </div>
             <nav className="hidden md:flex items-center space-x-6">
               <Link to="/vagas" className="text-gray-600 hover:text-blue-600 transition-colors">
-                Vagas
+                {t('nav.jobs')}
               </Link>
               <Link to="/empresas" className="text-gray-600 hover:text-blue-600 transition-colors">
-                Empresas
+                {t('nav.companies')}
               </Link>
               <Link to="/sobre" className="text-gray-600 hover:text-blue-600 transition-colors">
-                Sobre
+                {t('nav.about')}
               </Link>
             </nav>
             <div className="flex items-center space-x-3">
+              <LanguageSelector />
               <Link to="/login">
-                <Button variant="outline">Entrar</Button>
+                <Button variant="outline">{t('nav.login')}</Button>
               </Link>
               <Link to="/registro">
-                <Button className="bg-blue-600 hover:bg-blue-700">Cadastrar</Button>
+                <Button className="bg-blue-600 hover:bg-blue-700">{t('nav.register')}</Button>
               </Link>
             </div>
           </div>
@@ -89,11 +93,10 @@ const Index = () => {
       <section className="py-20">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Encontre sua <span className="text-blue-600">vaga ideal</span>
+            {t('home.title')} <span className="text-blue-600">{t('home.titleHighlight')}</span>
           </h2>
           <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-            Conectamos talentos com oportunidades incríveis. Milhares de vagas em empresas 
-            que valorizam diversidade e crescimento profissional.
+            {t('home.subtitle')}
           </p>
 
           {/* Search Box */}
@@ -104,7 +107,7 @@ const Index = () => {
                   <div className="flex-1 relative">
                     <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <Input
-                      placeholder="Cargo, palavra-chave ou empresa"
+                      placeholder={t('home.searchPlaceholder')}
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10 h-12"
@@ -113,14 +116,14 @@ const Index = () => {
                   <div className="flex-1 relative">
                     <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <Input
-                      placeholder="Cidade, estado ou remoto"
+                      placeholder={t('home.locationPlaceholder')}
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       className="pl-10 h-12"
                     />
                   </div>
                   <Button className="h-12 px-8 bg-blue-600 hover:bg-blue-700">
-                    Buscar Vagas
+                    {t('home.searchButton')}
                   </Button>
                 </div>
               </CardContent>
@@ -146,8 +149,8 @@ const Index = () => {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">Vagas em Destaque</h3>
-            <p className="text-lg text-gray-600">Oportunidades selecionadas especialmente para você</p>
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">{t('home.featuredJobs')}</h3>
+            <p className="text-lg text-gray-600">{t('home.featuredJobsSubtitle')}</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -181,7 +184,7 @@ const Index = () => {
                   </div>
                   <Link to="/login">
                     <Button className="w-full bg-green-600 hover:bg-green-700">
-                      Candidatar-se
+                      {t('home.applyButton')}
                     </Button>
                   </Link>
                 </CardContent>
@@ -192,7 +195,7 @@ const Index = () => {
           <div className="text-center">
             <Link to="/vagas">
               <Button variant="outline" size="lg">
-                Ver Todas as Vagas
+                {t('home.viewAllJobs')}
               </Button>
             </Link>
           </div>
@@ -203,20 +206,20 @@ const Index = () => {
       <section className="py-16 bg-blue-600">
         <div className="container mx-auto px-4 text-center">
           <h3 className="text-3xl font-bold text-white mb-4">
-            Pronto para encontrar sua próxima oportunidade?
+            {t('home.ctaTitle')}
           </h3>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Cadastre-se gratuitamente e tenha acesso a milhares de vagas exclusivas.
+            {t('home.ctaSubtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/registro?tipo=candidato">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                Sou Candidato
+                {t('home.candidateButton')}
               </Button>
             </Link>
             <Link to="/registro?tipo=empresa">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
-                Sou Empresa
+                {t('home.companyButton')}
               </Button>
             </Link>
           </div>
@@ -235,32 +238,32 @@ const Index = () => {
               <p className="text-gray-400">Conectando talentos com oportunidades desde 2024.</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Para Candidatos</h4>
+              <h4 className="font-semibold mb-4">{t('footer.forCandidates')}</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/vagas" className="hover:text-white">Buscar Vagas</Link></li>
-                <li><Link to="/registro" className="hover:text-white">Criar Perfil</Link></li>
-                <li><Link to="/dicas" className="hover:text-white">Dicas de Carreira</Link></li>
+                <li><Link to="/vagas" className="hover:text-white">{t('footer.searchJobs')}</Link></li>
+                <li><Link to="/registro" className="hover:text-white">{t('footer.createProfile')}</Link></li>
+                <li><Link to="/dicas" className="hover:text-white">{t('footer.careerTips')}</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Para Empresas</h4>
+              <h4 className="font-semibold mb-4">{t('footer.forCompanies')}</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/publicar-vaga" className="hover:text-white">Publicar Vaga</Link></li>
-                <li><Link to="/planos" className="hover:text-white">Planos</Link></li>
-                <li><Link to="/contato" className="hover:text-white">Contato</Link></li>
+                <li><Link to="/publicar-vaga" className="hover:text-white">{t('footer.publishJob')}</Link></li>
+                <li><Link to="/planos" className="hover:text-white">{t('footer.plans')}</Link></li>
+                <li><Link to="/contato" className="hover:text-white">{t('footer.contact')}</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Suporte</h4>
+              <h4 className="font-semibold mb-4">{t('footer.support')}</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/ajuda" className="hover:text-white">Central de Ajuda</Link></li>
-                <li><Link to="/privacidade" className="hover:text-white">Privacidade</Link></li>
-                <li><Link to="/termos" className="hover:text-white">Termos de Uso</Link></li>
+                <li><Link to="/ajuda" className="hover:text-white">{t('footer.helpCenter')}</Link></li>
+                <li><Link to="/privacidade" className="hover:text-white">{t('footer.privacy')}</Link></li>
+                <li><Link to="/termos" className="hover:text-white">{t('footer.terms')}</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 JobConnect. Todos os direitos reservados.</p>
+            <p>{t('footer.copyright')}</p>
           </div>
         </div>
       </footer>
