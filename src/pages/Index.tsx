@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Search, MapPin, Briefcase, Users, Building, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -271,7 +270,7 @@ const Index = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>{t('footer.copyright')} Jobsnow 2024.</p>
+            <p>{t('footer.copyright')}</p>
           </div>
         </div>
       </footer>

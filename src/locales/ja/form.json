@@ -1,0 +1,9 @@
+
+{
+  "fullName": "氏名",
+  "email": "メールアドレス",
+  "password": "パスワード",
+  "confirmPassword": "パスワード確認",
+  "companyName": "会社名",
+  "responsibleName": "担当者名"
+}
