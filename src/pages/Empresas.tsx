@@ -52,7 +52,7 @@ const Empresas = () => {
       company.company_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       company.description?.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesSector = !sector || company.sector === sector;
+    const matchesSector = !sector || sector === 'all' || company.sector === sector;
 
     return matchesSearch && matchesSector;
   });
@@ -86,7 +86,7 @@ const Empresas = () => {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
               <Briefcase className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900">JobConnect</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Jobsnow</h1>
             </Link>
             <nav className="hidden md:flex items-center space-x-6">
               <Link to="/vagas" className="text-gray-600 hover:text-blue-600 transition-colors">
@@ -137,7 +137,7 @@ const Empresas = () => {
                   <SelectValue placeholder="Setor" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos os setores</SelectItem>
+                  <SelectItem value="all">Todos os setores</SelectItem>
                   <SelectItem value="IT">Tecnologia</SelectItem>
                   <SelectItem value="retail">Varejo</SelectItem>
                   <SelectItem value="construction">Construção</SelectItem>

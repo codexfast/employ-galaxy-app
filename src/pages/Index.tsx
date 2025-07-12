@@ -14,37 +14,40 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [location, setLocation] = useState('');
 
-  // Mock data para vagas
+  // Mock data para vagas empreiteiras no Japão
   const featuredJobs = [
     {
       id: 1,
-      title: 'Desenvolvedor Frontend React',
-      company: 'TechCorp Brasil',
-      location: 'São Paulo, SP',
-      type: 'CLT',
-      salary: 'R$ 8.000 - R$ 12.000',
-      description: 'Desenvolvedor React sênior para projetos inovadores...',
-      tags: ['React', 'TypeScript', 'Remote']
+      title: 'Carpinteiro - Construção Residencial',
+      company: 'Tokyo Construction Co.',
+      location: 'Tokyo, Shibuya',
+      type: 'Meio Período',
+      salary: '¥1,500 - ¥2,000/hora',
+      description: 'Trabalho de carpintaria em construção residencial. Experiência com madeira tradicional japonesa é um diferencial.',
+      tags: ['Carpintaria', 'Construção', 'Meio Período'],
+      sector: 'Construção'
     },
     {
       id: 2,
-      title: 'Analista de Marketing Digital',
-      company: 'Marketing Plus',
-      location: 'Rio de Janeiro, RJ',
-      type: 'PJ',
-      salary: 'R$ 5.000 - R$ 8.000',
-      description: 'Profissional para gerenciar campanhas digitais...',
-      tags: ['Google Ads', 'SEO', 'Analytics']
+      title: 'Soldador Industrial',
+      company: 'Osaka Steel Works',
+      location: 'Osaka, Namba',
+      type: 'Tempo Integral',
+      salary: '¥2,200 - ¥2,800/hora',
+      description: 'Soldagem em estruturas industriais. Certificação de soldagem necessária.',
+      tags: ['Soldagem', 'Industrial', 'Certificação'],
+      sector: 'Manufatura'
     },
     {
       id: 3,
-      title: 'Engenheiro de Software',
-      company: 'StartupXYZ',
-      location: 'Remoto',
-      type: 'CLT',
-      salary: 'R$ 10.000 - R$ 15.000',
-      description: 'Engenheiro para arquitetura de sistemas escaláveis...',
-      tags: ['Python', 'AWS', 'Docker']
+      title: 'Eletricista Residencial',
+      company: 'Nagoya Electric Service',
+      location: 'Nagoya, Sakae',
+      type: 'Contrato',
+      salary: '¥1,800 - ¥2,500/hora',
+      description: 'Instalação e manutenção elétrica residencial. Conhecimento do sistema elétrico japonês é preferencial.',
+      tags: ['Elétrica', 'Residencial', 'Manutenção'],
+      sector: 'Serviços'
     }
   ];
 
@@ -63,7 +66,7 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Briefcase className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900">JobConnect</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Jobsnow</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
               <Link to="/vagas" className="text-gray-600 hover:text-blue-600 transition-colors">
@@ -150,7 +153,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h3 className="text-3xl font-bold text-gray-900 mb-4">{t('home.featuredJobs')}</h3>
-            <p className="text-lg text-gray-600">{t('home.featuredJobsSubtitle')}</p>
+            <p className="text-lg text-gray-600">Vagas empreiteiras no Japão com pagamento por hora</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -171,6 +174,11 @@ const Index = () => {
                   <div className="flex items-center gap-2 text-gray-600 mb-3">
                     <MapPin className="h-4 w-4" />
                     <span className="text-sm">{job.location}</span>
+                  </div>
+                  <div className="mb-3">
+                    <Badge variant="outline" className="text-xs mb-2">
+                      {job.sector}
+                    </Badge>
                   </div>
                   <p className="text-gray-700 text-sm mb-4 line-clamp-2">
                     {job.description}
@@ -233,9 +241,9 @@ const Index = () => {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Briefcase className="h-6 w-6 text-blue-400" />
-                <span className="text-xl font-bold">JobConnect</span>
+                <span className="text-xl font-bold">Jobsnow</span>
               </div>
-              <p className="text-gray-400">Conectando talentos com oportunidades desde 2024.</p>
+              <p className="text-gray-400">Conectando talentos com oportunidades no Japão desde 2020.</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">{t('footer.forCandidates')}</h4>
@@ -263,7 +271,7 @@ const Index = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>{t('footer.copyright')}</p>
+            <p>{t('footer.copyright')} Jobsnow 2024.</p>
           </div>
         </div>
       </footer>

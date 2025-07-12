@@ -65,9 +65,9 @@ const Vagas = () => {
 
   const formatSalary = (min: number | null, max: number | null) => {
     if (!min && !max) return null;
-    if (min && max) return `R$ ${min.toLocaleString()} - R$ ${max.toLocaleString()}`;
-    if (min) return `A partir de R$ ${min.toLocaleString()}`;
-    if (max) return `Até R$ ${max.toLocaleString()}`;
+    if (min && max) return `¥${min.toLocaleString()} - ¥${max.toLocaleString()}`;
+    if (min) return `A partir de ¥${min.toLocaleString()}`;
+    if (max) return `Até ¥${max.toLocaleString()}`;
     return null;
   };
 
@@ -90,7 +90,7 @@ const Vagas = () => {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
               <Briefcase className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900">JobConnect</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Jobsnow</h1>
             </Link>
             <nav className="hidden md:flex items-center space-x-6">
               <Link to="/vagas" className="text-blue-600 font-medium">
@@ -150,7 +150,7 @@ const Vagas = () => {
                   <SelectValue placeholder="Tipo de Vaga" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos os tipos</SelectItem>
+                  <SelectItem value="all">Todos os tipos</SelectItem>
                   <SelectItem value="full_time">Tempo Integral</SelectItem>
                   <SelectItem value="part_time">Meio Período</SelectItem>
                   <SelectItem value="contract">Contrato</SelectItem>
@@ -163,7 +163,7 @@ const Vagas = () => {
                   <SelectValue placeholder="Setor" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos os setores</SelectItem>
+                  <SelectItem value="all">Todos os setores</SelectItem>
                   <SelectItem value="IT">Tecnologia</SelectItem>
                   <SelectItem value="retail">Varejo</SelectItem>
                   <SelectItem value="construction">Construção</SelectItem>
