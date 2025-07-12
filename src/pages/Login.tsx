@@ -1,22 +1,99 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Briefcase, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/hooks/useAuth';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login, resetPassword, loading } = useAuth();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui seria implementada a lógica de login
-    console.log('Login attempt:', { email, password });
+    const success = await login(email, password);
+    if (success) {
+      navigate('/dashboard');
+    }
   };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const success = await resetPassword(resetEmail);
+    if (success) {
+      setShowForgotPassword(false);
+      setResetEmail('');
+    }
+  };
+
+  if (showForgotPassword) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <Link to="/" className="inline-flex items-center space-x-2 mb-6">
+              <Briefcase className="h-8 w-8 text-blue-600" />
+              <span className="text-2xl font-bold text-gray-900">Jobsnow</span>
+            </Link>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Recuperar Senha</h1>
+            <p className="text-gray-600">Digite seu e-mail para receber instruções</p>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Recuperação de Senha</CardTitle>
+              <CardDescription>
+                Enviaremos um link para redefinir sua senha
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleForgotPassword} className="space-y-4">
+                <div className="space-y-2">
+                  <label htmlFor="resetEmail" className="text-sm font-medium text-gray-700">
+                    E-mail
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <Input
+                      id="resetEmail"
+                      type="email"
+                      placeholder="seu@email.com"
+                      value={resetEmail}
+                      onChange={(e) => setResetEmail(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
+                  {loading ? 'Enviando...' : 'Enviar Link de Recuperação'}
+                </Button>
+              </form>
+
+              <div className="mt-4 text-center">
+                <button
+                  onClick={() => setShowForgotPassword(false)}
+                  className="text-sm text-blue-600 hover:text-blue-700"
+                >
+                  ← Voltar ao login
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center px-4">
@@ -25,7 +102,7 @@ const Login = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center space-x-2 mb-6">
             <Briefcase className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">JobConnect</span>
+            <span className="text-2xl font-bold text-gray-900">Jobsnow</span>
           </Link>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Bem-vindo de volta!</h1>
           <p className="text-gray-600">Entre na sua conta para continuar</p>
@@ -118,13 +195,17 @@ const Login = () => {
                   <input type="checkbox" className="rounded border-gray-300 mr-2" />
                   Lembrar de mim
                 </label>
-                <Link to="/recuperar-senha" className="text-blue-600 hover:text-blue-700">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-blue-600 hover:text-blue-700"
+                >
                   Esqueceu a senha?
-                </Link>
+                </button>
               </div>
 
-              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
-                Entrar
+              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
+                {loading ? 'Entrando...' : 'Entrar'}
               </Button>
             </form>
 

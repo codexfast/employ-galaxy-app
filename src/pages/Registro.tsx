@@ -68,7 +68,7 @@ const Registro = () => {
           <div className="flex justify-between items-center mb-8">
             <Link to="/" className="inline-flex items-center space-x-2">
               <Briefcase className="h-8 w-8 text-blue-600" />
-              <span className="text-2xl font-bold text-gray-900">JobConnect</span>
+              <span className="text-2xl font-bold text-gray-900">Jobsnow</span>
             </Link>
             <LanguageSelector />
           </div>
@@ -128,7 +128,7 @@ const Registro = () => {
         <div className="flex justify-between items-center mb-8">
           <Link to="/" className="inline-flex items-center space-x-2">
             <Briefcase className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">JobConnect</span>
+            <span className="text-2xl font-bold text-gray-900">Jobsnow</span>
           </Link>
           <LanguageSelector />
         </div>
