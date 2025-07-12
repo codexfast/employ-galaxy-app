@@ -127,4 +127,4 @@ export const useLanguage = () => {
   return { language, t, changeLanguage, isLoading };
 };
 
-export { Language };
+export type { Language };
