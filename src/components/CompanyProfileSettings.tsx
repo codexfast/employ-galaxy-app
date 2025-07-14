@@ -9,6 +9,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building, Mail, Phone, MapPin, Globe, FileText, Users, Calendar } from 'lucide-react';
+import type { Database } from '@/integrations/supabase/types';
+
+type SectorType = Database['public']['Enums']['sector_type'];
 
 interface CompanyProfile {
   company_name: string;
@@ -18,12 +21,12 @@ interface CompanyProfile {
   website: string;
   description: string;
   cnpj: string;
-  sector: string;
+  sector: SectorType | '';
   employee_count: number;
   founded_year: number;
 }
 
-const sectors = [
+const sectors: { value: SectorType; label: string }[] = [
   { value: 'IT', label: 'Tecnologia da Informação' },
   { value: 'retail', label: 'Varejo' },
   { value: 'construction', label: 'Construção' },
@@ -97,13 +100,27 @@ export const CompanyProfileSettings = () => {
     setLoading(true);
 
     try {
+      const updateData: any = {
+        id: user?.id,
+        company_name: profile.company_name,
+        responsible_name: profile.responsible_name,
+        phone: profile.phone,
+        address: profile.address,
+        website: profile.website,
+        description: profile.description,
+        cnpj: profile.cnpj,
+        employee_count: profile.employee_count,
+        founded_year: profile.founded_year
+      };
+
+      // Only include sector if it's not empty and is a valid enum value
+      if (profile.sector && profile.sector !== '') {
+        updateData.sector = profile.sector as SectorType;
+      }
+
       const { error } = await supabase
         .from('company_profiles')
-        .upsert({
-          id: user?.id,
-          ...profile,
-          updated_at: new Date().toISOString()
-        });
+        .upsert(updateData);
 
       if (error) {
         throw error;
@@ -210,7 +227,7 @@ export const CompanyProfileSettings = () => {
               <label className="text-sm font-medium text-gray-700">
                 Setor
               </label>
-              <Select value={profile.sector} onValueChange={(value) => setProfile({...profile, sector: value})}>
+              <Select value={profile.sector} onValueChange={(value) => setProfile({...profile, sector: value as SectorType})}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o setor" />
                 </SelectTrigger>
