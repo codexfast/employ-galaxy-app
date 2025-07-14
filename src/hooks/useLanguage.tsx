@@ -18,6 +18,7 @@ export const useLanguage = () => {
   useTranslationSection('jobs');
   useTranslationSection('companies');
   useTranslationSection('footer');
+  useTranslationSection('dashboard');
 
   const t = (key: string): string => {
     // Mapeia as chaves antigas para o novo formato

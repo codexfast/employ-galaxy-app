@@ -1,0 +1,35 @@
+
+{
+  "welcome": "Welcome back!",
+  "welcomeSubtitle": "Track your applications and find new opportunities.",
+  "companyWelcome": "Company Panel",
+  "companyWelcomeSubtitle": "Manage your jobs and candidates.",
+  "candidate": "Candidate",
+  "company": "Company",
+  "dashboard": "Dashboard",
+  "profile": "Profile",
+  "logout": "Logout",
+  "candidateApplications": "Active Applications",
+  "interviews": "Interviews",
+  "profileViews": "Profile Views",
+  "activeJobs": "Active Jobs",
+  "candidates": "Candidates",
+  "hires": "Hires",
+  "recentApplications": "Recent Applications",
+  "recentApplicationsSubtitle": "Track the status of your applications",
+  "myJobs": "My Jobs",
+  "myJobsSubtitle": "Manage your published jobs",
+  "viewAllApplications": "View all applications",
+  "viewAllJobs": "View all jobs",
+  "newJob": "New Job",
+  "profileSettings": "Profile Settings",
+  "profileSettingsSubtitle": "Update your personal information.",
+  "companySettings": "Company Settings",
+  "companySettingsSubtitle": "Update your company information.",
+  "status": {
+    "analyzing": "Under review",
+    "interviewScheduled": "Interview scheduled",
+    "active": "Active",
+    "paused": "Paused"
+  }
+}

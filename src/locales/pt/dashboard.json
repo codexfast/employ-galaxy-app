@@ -1,0 +1,35 @@
+
+{
+  "welcome": "Bem-vindo de volta!",
+  "welcomeSubtitle": "Acompanhe suas candidaturas e encontre novas oportunidades.",
+  "companyWelcome": "Painel da Empresa",
+  "companyWelcomeSubtitle": "Gerencie suas vagas e candidatos.",
+  "candidate": "Candidato",
+  "company": "Empresa",
+  "dashboard": "Dashboard",
+  "profile": "Perfil",
+  "logout": "Sair",
+  "candidateApplications": "Candidaturas Ativas",
+  "interviews": "Entrevistas",
+  "profileViews": "Perfil Visto",
+  "activeJobs": "Vagas Ativas",
+  "candidates": "Candidatos",
+  "hires": "Contratações",
+  "recentApplications": "Candidaturas Recentes",
+  "recentApplicationsSubtitle": "Acompanhe o status das suas candidaturas",
+  "myJobs": "Minhas Vagas",
+  "myJobsSubtitle": "Gerencie suas vagas publicadas",
+  "viewAllApplications": "Ver todas as candidaturas",
+  "viewAllJobs": "Ver todas as vagas",
+  "newJob": "Nova Vaga",
+  "profileSettings": "Configurações do Perfil",
+  "profileSettingsSubtitle": "Atualize suas informações pessoais.",
+  "companySettings": "Configurações da Empresa",
+  "companySettingsSubtitle": "Atualize as informações da sua empresa.",
+  "status": {
+    "analyzing": "Em análise",
+    "interviewScheduled": "Entrevista agendada",
+    "active": "Ativa",
+    "paused": "Pausada"
+  }
+}

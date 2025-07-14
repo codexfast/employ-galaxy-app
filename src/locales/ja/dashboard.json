@@ -1,0 +1,35 @@
+
+{
+  "welcome": "お帰りなさい！",
+  "welcomeSubtitle": "応募状況を追跡し、新しい機会を見つけてください。",
+  "companyWelcome": "企業パネル",
+  "companyWelcomeSubtitle": "求人と候補者を管理してください。",
+  "candidate": "候補者",
+  "company": "企業",
+  "dashboard": "ダッシュボード",
+  "profile": "プロフィール",
+  "logout": "ログアウト",
+  "candidateApplications": "アクティブな応募",
+  "interviews": "面接",
+  "profileViews": "プロフィール閲覧",
+  "activeJobs": "アクティブな求人",
+  "candidates": "候補者",
+  "hires": "採用",
+  "recentApplications": "最近の応募",
+  "recentApplicationsSubtitle": "応募状況を追跡する",
+  "myJobs": "私の求人",
+  "myJobsSubtitle": "公開中の求人を管理する",
+  "viewAllApplications": "すべての応募を表示",
+  "viewAllJobs": "すべての求人を表示",
+  "newJob": "新しい求人",
+  "profileSettings": "プロフィール設定",
+  "profileSettingsSubtitle": "個人情報を更新してください。",
+  "companySettings": "企業設定",
+  "companySettingsSubtitle": "企業情報を更新してください。",
+  "status": {
+    "analyzing": "審査中",
+    "interviewScheduled": "面接予定",
+    "active": "アクティブ",
+    "paused": "一時停止"
+  }
+}

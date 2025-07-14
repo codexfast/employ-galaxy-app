@@ -21,7 +21,7 @@ interface CompanyProfile {
   website: string;
   description: string;
   cnpj: string;
-  sector: SectorType | '';
+  sector: SectorType | null;
   employee_count: number;
   founded_year: number;
 }
@@ -52,7 +52,7 @@ export const CompanyProfileSettings = () => {
     website: '',
     description: '',
     cnpj: '',
-    sector: '',
+    sector: null,
     employee_count: 0,
     founded_year: new Date().getFullYear()
   });
@@ -85,7 +85,7 @@ export const CompanyProfileSettings = () => {
           website: data.website || '',
           description: data.description || '',
           cnpj: data.cnpj || '',
-          sector: data.sector || '',
+          sector: data.sector,
           employee_count: data.employee_count || 0,
           founded_year: data.founded_year || new Date().getFullYear()
         });
@@ -113,9 +113,9 @@ export const CompanyProfileSettings = () => {
         founded_year: profile.founded_year
       };
 
-      // Only include sector if it's not empty and is a valid enum value
-      if (profile.sector && profile.sector !== '') {
-        updateData.sector = profile.sector as SectorType;
+      // Only include sector if it's not null
+      if (profile.sector !== null) {
+        updateData.sector = profile.sector;
       }
 
       const { error } = await supabase
@@ -134,7 +134,7 @@ export const CompanyProfileSettings = () => {
       console.error('Error updating profile:', error);
       toast({
         title: "Erro ao salvar",
-        description: "Ocorreu um erro ao salvar as informações.",
+        description: "Ocorreu um erro ao salvar as informações da empresa.",
         variant: "destructive"
       });
     } finally {
@@ -161,7 +161,21 @@ export const CompanyProfileSettings = () => {
               <Input
                 value={profile.company_name}
                 onChange={(e) => setProfile({...profile, company_name: e.target.value})}
-                placeholder="Nome da empresa"
+                placeholder="Nome da sua empresa"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 flex items-center space-x-1">
+                <Users className="h-4 w-4" />
+                <span>Nome do Responsável</span>
+              </label>
+              <Input
+                value={profile.responsible_name}
+                onChange={(e) => setProfile({...profile, responsible_name: e.target.value})}
+                placeholder="Seu nome"
+                required
               />
             </div>
 
@@ -174,17 +188,6 @@ export const CompanyProfileSettings = () => {
                 value={user?.email || ''}
                 disabled
                 className="bg-gray-100"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Nome do Responsável
-              </label>
-              <Input
-                value={profile.responsible_name}
-                onChange={(e) => setProfile({...profile, responsible_name: e.target.value})}
-                placeholder="Nome do responsável"
               />
             </div>
 
@@ -212,22 +215,13 @@ export const CompanyProfileSettings = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 flex items-center space-x-1">
-                <Globe className="h-4 w-4" />
-                <span>Website</span>
-              </label>
-              <Input
-                value={profile.website}
-                onChange={(e) => setProfile({...profile, website: e.target.value})}
-                placeholder="https://www.empresa.com"
-              />
-            </div>
-
-            <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
                 Setor
               </label>
-              <Select value={profile.sector} onValueChange={(value) => setProfile({...profile, sector: value as SectorType})}>
+              <Select 
+                value={profile.sector || undefined} 
+                onValueChange={(value) => setProfile({...profile, sector: value as SectorType})}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o setor" />
                 </SelectTrigger>
@@ -250,7 +244,8 @@ export const CompanyProfileSettings = () => {
                 type="number"
                 value={profile.employee_count}
                 onChange={(e) => setProfile({...profile, employee_count: parseInt(e.target.value) || 0})}
-                placeholder="50"
+                placeholder="100"
+                min="1"
               />
             </div>
 
@@ -264,8 +259,22 @@ export const CompanyProfileSettings = () => {
                 value={profile.founded_year}
                 onChange={(e) => setProfile({...profile, founded_year: parseInt(e.target.value) || new Date().getFullYear()})}
                 placeholder="2020"
+                min="1900"
+                max={new Date().getFullYear()}
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center space-x-1">
+              <Globe className="h-4 w-4" />
+              <span>Website</span>
+            </label>
+            <Input
+              value={profile.website}
+              onChange={(e) => setProfile({...profile, website: e.target.value})}
+              placeholder="https://www.suaempresa.com"
+            />
           </div>
 
           <div className="space-y-2">
@@ -288,7 +297,7 @@ export const CompanyProfileSettings = () => {
             <Textarea
               value={profile.description}
               onChange={(e) => setProfile({...profile, description: e.target.value})}
-              placeholder="Descreva sua empresa, missão, valores e atividades..."
+              placeholder="Conte sobre sua empresa, missão, valores e o que vocês fazem..."
               rows={4}
             />
           </div>

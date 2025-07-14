@@ -12,11 +12,17 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { CandidateProfileSettings } from '@/components/CandidateProfileSettings';
 import { CompanyProfileSettings } from '@/components/CompanyProfileSettings';
+import { LanguageSelector } from '@/components/LanguageSelector';
+import { useTranslations, useTranslationSection } from '@/hooks/useTranslations';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
+  const { t } = useTranslations();
   const [userType, setUserType] = useState<'candidate' | 'company' | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Load dashboard translations
+  useTranslationSection('dashboard');
 
   useEffect(() => {
     if (user) {
@@ -68,7 +74,7 @@ const Dashboard = () => {
       id: 1,
       vaga: 'Desenvolvedor Frontend React',
       empresa: 'TechCorp Brasil',
-      status: 'Em análise',
+      status: 'analyzing',
       data: '2024-01-15',
       salario: 'R$ 8.000 - R$ 12.000'
     },
@@ -76,7 +82,7 @@ const Dashboard = () => {
       id: 2,
       vaga: 'Engenheiro de Software',
       empresa: 'StartupXYZ',
-      status: 'Entrevista agendada',
+      status: 'interviewScheduled',
       data: '2024-01-10',
       salario: 'R$ 10.000 - R$ 15.000'
     }
@@ -87,7 +93,7 @@ const Dashboard = () => {
       id: 1,
       titulo: 'Analista de Marketing Digital',
       candidatos: 24,
-      status: 'Ativa',
+      status: 'active',
       publicada: '2024-01-12',
       expira: '2024-02-12'
     },
@@ -95,7 +101,7 @@ const Dashboard = () => {
       id: 2,
       titulo: 'Desenvolvedor Full Stack',
       candidatos: 18,
-      status: 'Pausada',
+      status: 'paused',
       publicada: '2024-01-08',
       expira: '2024-02-08'
     }
@@ -103,13 +109,13 @@ const Dashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Em análise':
+      case 'analyzing':
         return 'bg-yellow-100 text-yellow-800';
-      case 'Entrevista agendada':
+      case 'interviewScheduled':
         return 'bg-blue-100 text-blue-800';
-      case 'Ativa':
+      case 'active':
         return 'bg-green-100 text-green-800';
-      case 'Pausada':
+      case 'paused':
         return 'bg-gray-100 text-gray-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -128,6 +134,7 @@ const Dashboard = () => {
                 <span className="text-2xl font-bold text-gray-900">Jobsnow</span>
               </Link>
               <div className="flex items-center space-x-4">
+                <LanguageSelector />
                 <Button variant="ghost" size="sm">
                   <Bell className="h-5 w-5" />
                 </Button>
@@ -151,19 +158,19 @@ const Dashboard = () => {
                 </Avatar>
                 <div>
                   <div className="font-semibold text-gray-900">{user?.email}</div>
-                  <div className="text-sm text-gray-500">Candidato</div>
+                  <div className="text-sm text-gray-500">{t('dashboard', 'candidate')}</div>
                 </div>
               </div>
               <Tabs defaultValue="dashboard" className="w-full">
                 <TabsList className="grid w-full grid-cols-1">
-                  <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-                  <TabsTrigger value="profile">Perfil</TabsTrigger>
+                  <TabsTrigger value="dashboard">{t('dashboard', 'dashboard')}</TabsTrigger>
+                  <TabsTrigger value="profile">{t('dashboard', 'profile')}</TabsTrigger>
                 </TabsList>
               </Tabs>
               <div className="mt-4">
                 <Button variant="ghost" className="w-full justify-start text-red-600" onClick={handleLogout}>
                   <LogOut className="h-4 w-4 mr-2" />
-                  Sair
+                  {t('dashboard', 'logout')}
                 </Button>
               </div>
             </aside>
@@ -173,8 +180,8 @@ const Dashboard = () => {
               <Tabs defaultValue="dashboard" className="w-full">
                 <TabsContent value="dashboard">
                   <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Bem-vindo de volta!</h1>
-                    <p className="text-gray-600">Acompanhe suas candidaturas e encontre novas oportunidades.</p>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('dashboard', 'welcome')}</h1>
+                    <p className="text-gray-600">{t('dashboard', 'welcomeSubtitle')}</p>
                   </div>
 
                   {/* Stats Cards */}
@@ -183,7 +190,7 @@ const Dashboard = () => {
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm font-medium text-gray-600">Candidaturas Ativas</p>
+                            <p className="text-sm font-medium text-gray-600">{t('dashboard', 'candidateApplications')}</p>
                             <p className="text-2xl font-bold text-gray-900">8</p>
                           </div>
                           <Briefcase className="h-8 w-8 text-blue-600" />
@@ -194,7 +201,7 @@ const Dashboard = () => {
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm font-medium text-gray-600">Entrevistas</p>
+                            <p className="text-sm font-medium text-gray-600">{t('dashboard', 'interviews')}</p>
                             <p className="text-2xl font-bold text-gray-900">3</p>
                           </div>
                           <Calendar className="h-8 w-8 text-green-600" />
@@ -205,7 +212,7 @@ const Dashboard = () => {
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm font-medium text-gray-600">Perfil Visto</p>
+                            <p className="text-sm font-medium text-gray-600">{t('dashboard', 'profileViews')}</p>
                             <p className="text-2xl font-bold text-gray-900">24</p>
                           </div>
                           <Eye className="h-8 w-8 text-purple-600" />
@@ -217,8 +224,8 @@ const Dashboard = () => {
                   {/* Recent Applications */}
                   <Card>
                     <CardHeader>
-                      <CardTitle>Candidaturas Recentes</CardTitle>
-                      <CardDescription>Acompanhe o status das suas candidaturas</CardDescription>
+                      <CardTitle>{t('dashboard', 'recentApplications')}</CardTitle>
+                      <CardDescription>{t('dashboard', 'recentApplicationsSubtitle')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
@@ -231,7 +238,7 @@ const Dashboard = () => {
                             </div>
                             <div className="flex items-center space-x-4">
                               <Badge className={getStatusColor(candidatura.status)}>
-                                {candidatura.status}
+                                {t('dashboard', `status.${candidatura.status}`)}
                               </Badge>
                               <span className="text-sm text-gray-500">{candidatura.data}</span>
                             </div>
@@ -239,7 +246,7 @@ const Dashboard = () => {
                         ))}
                       </div>
                       <div className="mt-4 text-center">
-                        <Button variant="outline">Ver todas as candidaturas</Button>
+                        <Button variant="outline">{t('dashboard', 'viewAllApplications')}</Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -247,8 +254,8 @@ const Dashboard = () => {
 
                 <TabsContent value="profile">
                   <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Configurações do Perfil</h1>
-                    <p className="text-gray-600">Atualize suas informações pessoais.</p>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('dashboard', 'profileSettings')}</h1>
+                    <p className="text-gray-600">{t('dashboard', 'profileSettingsSubtitle')}</p>
                   </div>
                   <CandidateProfileSettings />
                 </TabsContent>
@@ -272,6 +279,7 @@ const Dashboard = () => {
               <span className="text-2xl font-bold text-gray-900">Jobsnow</span>
             </Link>
             <div className="flex items-center space-x-4">
+              <LanguageSelector />
               <Button variant="ghost" size="sm">
                 <Bell className="h-5 w-5" />
               </Button>
@@ -295,19 +303,19 @@ const Dashboard = () => {
               </Avatar>
               <div>
                 <div className="font-semibold text-gray-900">{user?.email}</div>
-                <div className="text-sm text-gray-500">Empresa</div>
+                <div className="text-sm text-gray-500">{t('dashboard', 'company')}</div>
               </div>
             </div>
             <Tabs defaultValue="dashboard" className="w-full">
               <TabsList className="grid w-full grid-cols-1">
-                <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-                <TabsTrigger value="profile">Perfil</TabsTrigger>
+                <TabsTrigger value="dashboard">{t('dashboard', 'dashboard')}</TabsTrigger>
+                <TabsTrigger value="profile">{t('dashboard', 'profile')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="mt-4">
               <Button variant="ghost" className="w-full justify-start text-red-600" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />
-                Sair
+                {t('dashboard', 'logout')}
               </Button>
             </div>
           </aside>
@@ -318,12 +326,12 @@ const Dashboard = () => {
               <TabsContent value="dashboard">
                 <div className="flex items-center justify-between mb-8">
                   <div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Painel da Empresa</h1>
-                    <p className="text-gray-600">Gerencie suas vagas e candidatos.</p>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('dashboard', 'companyWelcome')}</h1>
+                    <p className="text-gray-600">{t('dashboard', 'companyWelcomeSubtitle')}</p>
                   </div>
                   <Button className="bg-blue-600 hover:bg-blue-700">
                     <Plus className="h-4 w-4 mr-2" />
-                    Nova Vaga
+                    {t('dashboard', 'newJob')}
                   </Button>
                 </div>
 
@@ -333,7 +341,7 @@ const Dashboard = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-gray-600">Vagas Ativas</p>
+                          <p className="text-sm font-medium text-gray-600">{t('dashboard', 'activeJobs')}</p>
                           <p className="text-2xl font-bold text-gray-900">12</p>
                         </div>
                         <Briefcase className="h-8 w-8 text-blue-600" />
@@ -344,7 +352,7 @@ const Dashboard = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-gray-600">Candidatos</p>
+                          <p className="text-sm font-medium text-gray-600">{t('dashboard', 'candidates')}</p>
                           <p className="text-2xl font-bold text-gray-900">156</p>
                         </div>
                         <Users className="h-8 w-8 text-green-600" />
@@ -355,7 +363,7 @@ const Dashboard = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-gray-600">Entrevistas</p>
+                          <p className="text-sm font-medium text-gray-600">{t('dashboard', 'interviews')}</p>
                           <p className="text-2xl font-bold text-gray-900">8</p>
                         </div>
                         <Calendar className="h-8 w-8 text-purple-600" />
@@ -366,7 +374,7 @@ const Dashboard = () => {
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-gray-600">Contratações</p>
+                          <p className="text-sm font-medium text-gray-600">{t('dashboard', 'hires')}</p>
                           <p className="text-2xl font-bold text-gray-900">3</p>
                         </div>
                         <BarChart3 className="h-8 w-8 text-orange-600" />
@@ -378,8 +386,8 @@ const Dashboard = () => {
                 {/* Recent Jobs */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Minhas Vagas</CardTitle>
-                    <CardDescription>Gerencie suas vagas publicadas</CardDescription>
+                    <CardTitle>{t('dashboard', 'myJobs')}</CardTitle>
+                    <CardDescription>{t('dashboard', 'myJobsSubtitle')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
@@ -392,7 +400,7 @@ const Dashboard = () => {
                           </div>
                           <div className="flex items-center space-x-4">
                             <Badge className={getStatusColor(vaga.status)}>
-                              {vaga.status}
+                              {t('dashboard', `status.${vaga.status}`)}
                             </Badge>
                             <div className="flex space-x-2">
                               <Button variant="ghost" size="sm">
@@ -410,7 +418,7 @@ const Dashboard = () => {
                       ))}
                     </div>
                     <div className="mt-4 text-center">
-                      <Button variant="outline">Ver todas as vagas</Button>
+                      <Button variant="outline">{t('dashboard', 'viewAllJobs')}</Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -418,8 +426,8 @@ const Dashboard = () => {
 
               <TabsContent value="profile">
                 <div className="mb-8">
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">Configurações da Empresa</h1>
-                  <p className="text-gray-600">Atualize as informações da sua empresa.</p>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('dashboard', 'companySettings')}</h1>
+                  <p className="text-gray-600">{t('dashboard', 'companySettingsSubtitle')}</p>
                 </div>
                 <CompanyProfileSettings />
               </TabsContent>
