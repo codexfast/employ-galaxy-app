@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslations } from '@/hooks/useTranslations';
+import { useLanguage } from '@/hooks/useLanguage';
 import { LanguageSelector } from '@/components/LanguageSelector';
 
 const ResetPassword = () => {
-  const { t } = useTranslations();
+  const { t } = useLanguage();
   const { updatePassword, loading } = useAuth();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -24,7 +24,10 @@ const ResetPassword = () => {
     const accessToken = searchParams.get('access_token');
     const refreshToken = searchParams.get('refresh_token');
     
+    console.log('Reset password page - tokens:', { accessToken: !!accessToken, refreshToken: !!refreshToken });
+    
     if (!accessToken || !refreshToken) {
+      console.log('Missing tokens, redirecting to login');
       navigate('/login');
     }
   }, [searchParams, navigate]);

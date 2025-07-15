@@ -37,7 +37,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.id);
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -46,12 +47,44 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             title: "Login realizado!",
             description: "Bem-vindo de volta!"
           });
+
+          // Handle Google OAuth completion
+          if (session?.user) {
+            // Check if this is a Google OAuth registration
+            const pendingUserType = localStorage.getItem('pendingUserType');
+            if (pendingUserType && (pendingUserType === 'candidate' || pendingUserType === 'company')) {
+              console.log('Completing Google OAuth registration with user type:', pendingUserType);
+              
+              // Update user metadata with the user type
+              try {
+                const { error } = await supabase.auth.updateUser({
+                  data: { 
+                    user_type: pendingUserType,
+                    full_name: session.user.user_metadata.full_name,
+                    company_name: pendingUserType === 'company' ? session.user.user_metadata.name : undefined
+                  }
+                });
+                
+                if (error) {
+                  console.error('Error updating user metadata:', error);
+                } else {
+                  console.log('User metadata updated successfully');
+                }
+              } catch (error) {
+                console.error('Error in updateUser:', error);
+              }
+              
+              // Clean up
+              localStorage.removeItem('pendingUserType');
+            }
+          }
         }
       }
     );
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session check:', session?.user?.id);
       setSession(session);
       setUser(session?.user ?? null);
     });
@@ -83,6 +116,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (error) {
+        console.error('Registration error:', error);
         if (error.message.includes('User already registered')) {
           toast({
             title: "E-mail já cadastrado",
@@ -126,6 +160,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (error) {
+        console.error('Login error:', error);
         if (error.message.includes('Invalid login credentials')) {
           toast({
             title: "Credenciais inválidas",
@@ -173,6 +208,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (error) {
+        console.error('Google login error:', error);
         toast({
           title: "Erro no login com Google",
           description: error.message,
@@ -209,11 +245,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (error) {
+        console.error('Google registration error:', error);
         toast({
           title: "Erro no cadastro com Google",
           description: error.message,
           variant: "destructive"
         });
+        localStorage.removeItem('pendingUserType');
         return false;
       }
 
@@ -225,6 +263,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: "Ocorreu um erro inesperado. Tente novamente.",
         variant: "destructive"
       });
+      localStorage.removeItem('pendingUserType');
       return false;
     } finally {
       setLoading(false);
@@ -235,6 +274,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {
+        console.error('Logout error:', error);
         toast({
           title: "Erro ao sair",
           description: error.message,
@@ -259,6 +299,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (error) {
+        console.error('Reset password error:', error);
         toast({
           title: "Erro na recuperação",
           description: error.message,
@@ -293,6 +334,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (error) {
+        console.error('Update password error:', error);
         toast({
           title: "Erro ao atualizar senha",
           description: error.message,

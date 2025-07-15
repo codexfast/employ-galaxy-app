@@ -7,13 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslations } from '@/hooks/useTranslations';
+import { useLanguage } from '@/hooks/useLanguage';
 import { LanguageSelector } from '@/components/LanguageSelector';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login, loginWithGoogle, resetPassword, loading } = useAuth();
-  const { t } = useTranslations();
+  const { t } = useLanguage();
   
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -58,32 +58,32 @@ const Login = () => {
               <LanguageSelector />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {t('login', 'resetPassword.title')}
+              {t('login.resetPassword.title')}
             </h1>
             <p className="text-gray-600">
-              {t('login', 'resetPassword.subtitle')}
+              {t('login.resetPassword.subtitle')}
             </p>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>{t('login', 'resetPassword.cardTitle')}</CardTitle>
+              <CardTitle>{t('login.resetPassword.cardTitle')}</CardTitle>
               <CardDescription>
-                {t('login', 'resetPassword.cardSubtitle')}
+                {t('login.resetPassword.cardSubtitle')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleForgotPassword} className="space-y-4">
                 <div className="space-y-2">
                   <label htmlFor="resetEmail" className="text-sm font-medium text-gray-700">
-                    {t('login', 'resetPassword.emailLabel')}
+                    {t('login.resetPassword.emailLabel')}
                   </label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <Input
                       id="resetEmail"
                       type="email"
-                      placeholder={t('login', 'form.emailPlaceholder')}
+                      placeholder={t('login.form.emailPlaceholder')}
                       value={resetEmail}
                       onChange={(e) => setResetEmail(e.target.value)}
                       className="pl-10"
@@ -93,7 +93,7 @@ const Login = () => {
                 </div>
 
                 <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
-                  {loading ? t('login', 'resetPassword.sending') : t('login', 'resetPassword.sendButton')}
+                  {loading ? t('login.resetPassword.sending') : t('login.resetPassword.sendButton')}
                 </Button>
               </form>
 
@@ -102,7 +102,7 @@ const Login = () => {
                   onClick={() => setShowForgotPassword(false)}
                   className="text-sm text-blue-600 hover:text-blue-700"
                 >
-                  {t('login', 'resetPassword.backToLogin')}
+                  {t('login.resetPassword.backToLogin')}
                 </button>
               </div>
             </CardContent>
@@ -125,18 +125,18 @@ const Login = () => {
             <LanguageSelector />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t('login', 'title')}
+            {t('login.title')}
           </h1>
           <p className="text-gray-600">
-            {t('login', 'subtitle')}
+            {t('login.subtitle')}
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('login', 'loginCard.title')}</CardTitle>
+            <CardTitle>{t('login.loginCard.title')}</CardTitle>
             <CardDescription>
-              {t('login', 'loginCard.subtitle')}
+              {t('login.loginCard.subtitle')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -155,14 +155,14 @@ const Login = () => {
                   <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                   <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
-                {t('login', 'social.continueWithGoogle')}
+                {t('login.social.continueWithGoogle')}
               </Button>
               
               <Button variant="outline" className="w-full" type="button" disabled>
                 <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
-                {t('login', 'social.continueWithFacebook')}
+                {t('login.social.continueWithFacebook')}
               </Button>
             </div>
 
@@ -172,7 +172,7 @@ const Login = () => {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-white px-2 text-gray-500">
-                  {t('login', 'social.or')}
+                  {t('login.social.or')}
                 </span>
               </div>
             </div>
@@ -181,14 +181,14 @@ const Login = () => {
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                  {t('login', 'form.email')}
+                  {t('login.form.email')}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <Input
                     id="email"
                     type="email"
-                    placeholder={t('login', 'form.emailPlaceholder')}
+                    placeholder={t('login.form.emailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
@@ -199,14 +199,14 @@ const Login = () => {
 
               <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-medium text-gray-700">
-                  {t('login', 'form.password')}
+                  {t('login.form.password')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder={t('login', 'form.passwordPlaceholder')}
+                    placeholder={t('login.form.passwordPlaceholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
@@ -225,26 +225,26 @@ const Login = () => {
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center">
                   <input type="checkbox" className="rounded border-gray-300 mr-2" />
-                  {t('login', 'form.rememberMe')}
+                  {t('login.form.rememberMe')}
                 </label>
                 <button
                   type="button"
                   onClick={() => setShowForgotPassword(true)}
                   className="text-blue-600 hover:text-blue-700"
                 >
-                  {t('login', 'form.forgotPassword')}
+                  {t('login.form.forgotPassword')}
                 </button>
               </div>
 
               <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
-                {loading ? t('login', 'form.signingIn') : t('login', 'form.loginButton')}
+                {loading ? t('login.form.signingIn') : t('login.form.loginButton')}
               </Button>
             </form>
 
             <div className="text-center text-sm text-gray-600">
-              {t('login', 'noAccount')}{' '}
+              {t('login.noAccount')}{' '}
               <Link to="/registro" className="text-blue-600 hover:text-blue-700 font-medium">
-                {t('login', 'signupLink')}
+                {t('login.signupLink')}
               </Link>
             </div>
           </CardContent>
@@ -252,7 +252,7 @@ const Login = () => {
 
         <div className="mt-8 text-center">
           <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
-            {t('login', 'backToHome')}
+            {t('login.backToHome')}
           </Link>
         </div>
       </div>
