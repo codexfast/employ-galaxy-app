@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Briefcase, Lock, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,23 +11,41 @@ import { LanguageSelector } from '@/components/LanguageSelector';
 
 const ResetPassword = () => {
   const { t } = useTranslations();
-  const { loading } = useAuth();
+  const { updatePassword, loading } = useAuth();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  useEffect(() => {
+    // Check if we have the required tokens in the URL
+    const accessToken = searchParams.get('access_token');
+    const refreshToken = searchParams.get('refresh_token');
+    
+    if (!accessToken || !refreshToken) {
+      navigate('/login');
+    }
+  }, [searchParams, navigate]);
+
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (password !== confirmPassword) {
-      // Handle password mismatch
+      alert('As senhas não coincidem');
       return;
     }
 
-    // Here you would implement the actual password reset logic
-    // using the access_token from searchParams
+    if (password.length < 8) {
+      alert('A senha deve ter pelo menos 8 caracteres');
+      return;
+    }
+
+    const success = await updatePassword(password);
+    if (success) {
+      navigate('/dashboard');
+    }
   };
 
   return (
@@ -42,35 +60,36 @@ const ResetPassword = () => {
             <LanguageSelector />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t('login', 'resetPassword.title')}
+            Redefinir Senha
           </h1>
           <p className="text-gray-600">
-            {t('login', 'resetPassword.subtitle')}
+            Digite sua nova senha abaixo
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('login', 'resetPassword.cardTitle')}</CardTitle>
+            <CardTitle>Nova Senha</CardTitle>
             <CardDescription>
-              {t('login', 'resetPassword.cardSubtitle')}
+              Escolha uma senha segura para sua conta
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-medium text-gray-700">
-                  {t('login', 'form.password')}
+                  Nova Senha
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder={t('login', 'form.passwordPlaceholder')}
+                    placeholder="Mínimo 8 caracteres"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
+                    minLength={8}
                     required
                   />
                   <button
@@ -85,7 +104,7 @@ const ResetPassword = () => {
 
               <div className="space-y-2">
                 <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
-                  Confirmar Senha
+                  Confirmar Nova Senha
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
@@ -118,7 +137,7 @@ const ResetPassword = () => {
                 to="/login"
                 className="text-sm text-blue-600 hover:text-blue-700"
               >
-                {t('login', 'resetPassword.backToLogin')}
+                Voltar ao Login
               </Link>
             </div>
           </CardContent>

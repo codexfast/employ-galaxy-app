@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import Registro from "./pages/Registro";
 import Dashboard from "./pages/Dashboard";
+import CompleteProfile from "./pages/CompleteProfile";
 import Vagas from "./pages/Vagas";
 import Empresas from "./pages/Empresas";
 import Sobre from "./pages/Sobre";
@@ -46,6 +47,7 @@ const AppContent = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/vagas" element={<Vagas />} />
         <Route path="/empresas" element={<Empresas />} />
         <Route path="/sobre" element={<Sobre />} />

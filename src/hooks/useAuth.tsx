@@ -20,6 +20,7 @@ interface AuthContextType {
   register: (data: RegisterData) => Promise<boolean>;
   login: (email: string, password: string) => Promise<boolean>;
   loginWithGoogle: () => Promise<boolean>;
+  registerWithGoogle: (userType: 'candidate' | 'company') => Promise<boolean>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<boolean>;
   updatePassword: (password: string) => Promise<boolean>;
@@ -194,6 +195,42 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const registerWithGoogle = async (userType: 'candidate' | 'company') => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/complete-profile`,
+          data: {
+            user_type: userType
+          }
+        }
+      });
+
+      if (error) {
+        toast({
+          title: "Erro no cadastro com Google",
+          description: error.message,
+          variant: "destructive"
+        });
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Google registration error:', error);
+      toast({
+        title: "Erro no cadastro com Google",
+        description: "Ocorreu um erro inesperado. Tente novamente.",
+        variant: "destructive"
+      });
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -289,6 +326,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     register,
     login,
     loginWithGoogle,
+    registerWithGoogle,
     logout,
     resetPassword,
     updatePassword,
