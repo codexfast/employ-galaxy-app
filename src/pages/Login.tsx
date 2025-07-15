@@ -7,10 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/useAuth';
+import { useTranslations } from '@/hooks/useTranslations';
+import { LanguageSelector } from '@/components/LanguageSelector';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, resetPassword, loading } = useAuth();
+  const { login, loginWithGoogle, resetPassword, loading } = useAuth();
+  const { t } = useTranslations();
   
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -21,6 +24,13 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await login(email, password);
+    if (success) {
+      navigate('/dashboard');
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    const success = await loginWithGoogle();
     if (success) {
       navigate('/dashboard');
     }
@@ -44,29 +54,36 @@ const Login = () => {
               <Briefcase className="h-8 w-8 text-blue-600" />
               <span className="text-2xl font-bold text-gray-900">Jobsnow</span>
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Recuperar Senha</h1>
-            <p className="text-gray-600">Digite seu e-mail para receber instruções</p>
+            <div className="flex justify-center mb-4">
+              <LanguageSelector />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              {t('login', 'resetPassword.title')}
+            </h1>
+            <p className="text-gray-600">
+              {t('login', 'resetPassword.subtitle')}
+            </p>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>Recuperação de Senha</CardTitle>
+              <CardTitle>{t('login', 'resetPassword.cardTitle')}</CardTitle>
               <CardDescription>
-                Enviaremos um link para redefinir sua senha
+                {t('login', 'resetPassword.cardSubtitle')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleForgotPassword} className="space-y-4">
                 <div className="space-y-2">
                   <label htmlFor="resetEmail" className="text-sm font-medium text-gray-700">
-                    E-mail
+                    {t('login', 'resetPassword.emailLabel')}
                   </label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <Input
                       id="resetEmail"
                       type="email"
-                      placeholder="seu@email.com"
+                      placeholder={t('login', 'form.emailPlaceholder')}
                       value={resetEmail}
                       onChange={(e) => setResetEmail(e.target.value)}
                       className="pl-10"
@@ -76,7 +93,7 @@ const Login = () => {
                 </div>
 
                 <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
-                  {loading ? 'Enviando...' : 'Enviar Link de Recuperação'}
+                  {loading ? t('login', 'resetPassword.sending') : t('login', 'resetPassword.sendButton')}
                 </Button>
               </form>
 
@@ -85,7 +102,7 @@ const Login = () => {
                   onClick={() => setShowForgotPassword(false)}
                   className="text-sm text-blue-600 hover:text-blue-700"
                 >
-                  ← Voltar ao login
+                  {t('login', 'resetPassword.backToLogin')}
                 </button>
               </div>
             </CardContent>
@@ -104,35 +121,48 @@ const Login = () => {
             <Briefcase className="h-8 w-8 text-blue-600" />
             <span className="text-2xl font-bold text-gray-900">Jobsnow</span>
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Bem-vindo de volta!</h1>
-          <p className="text-gray-600">Entre na sua conta para continuar</p>
+          <div className="flex justify-center mb-4">
+            <LanguageSelector />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            {t('login', 'title')}
+          </h1>
+          <p className="text-gray-600">
+            {t('login', 'subtitle')}
+          </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Entrar</CardTitle>
+            <CardTitle>{t('login', 'loginCard.title')}</CardTitle>
             <CardDescription>
-              Acesse sua conta usando e-mail e senha ou redes sociais
+              {t('login', 'loginCard.subtitle')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Social Login */}
             <div className="space-y-3">
-              <Button variant="outline" className="w-full" type="button">
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                type="button"
+                onClick={handleGoogleLogin}
+                disabled={loading}
+              >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                   <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
-                Continuar com Google
+                {t('login', 'social.continueWithGoogle')}
               </Button>
               
-              <Button variant="outline" className="w-full" type="button">
+              <Button variant="outline" className="w-full" type="button" disabled>
                 <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
-                Continuar com Facebook
+                {t('login', 'social.continueWithFacebook')}
               </Button>
             </div>
 
@@ -141,7 +171,9 @@ const Login = () => {
                 <Separator />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-500">ou</span>
+                <span className="bg-white px-2 text-gray-500">
+                  {t('login', 'social.or')}
+                </span>
               </div>
             </div>
 
@@ -149,14 +181,14 @@ const Login = () => {
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                  E-mail
+                  {t('login', 'form.email')}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="seu@email.com"
+                    placeholder={t('login', 'form.emailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
@@ -167,14 +199,14 @@ const Login = () => {
 
               <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-medium text-gray-700">
-                  Senha
+                  {t('login', 'form.password')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Sua senha"
+                    placeholder={t('login', 'form.passwordPlaceholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
@@ -193,26 +225,26 @@ const Login = () => {
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center">
                   <input type="checkbox" className="rounded border-gray-300 mr-2" />
-                  Lembrar de mim
+                  {t('login', 'form.rememberMe')}
                 </label>
                 <button
                   type="button"
                   onClick={() => setShowForgotPassword(true)}
                   className="text-blue-600 hover:text-blue-700"
                 >
-                  Esqueceu a senha?
+                  {t('login', 'form.forgotPassword')}
                 </button>
               </div>
 
               <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
-                {loading ? 'Entrando...' : 'Entrar'}
+                {loading ? t('login', 'form.signingIn') : t('login', 'form.loginButton')}
               </Button>
             </form>
 
             <div className="text-center text-sm text-gray-600">
-              Não tem uma conta?{' '}
+              {t('login', 'noAccount')}{' '}
               <Link to="/registro" className="text-blue-600 hover:text-blue-700 font-medium">
-                Cadastre-se aqui
+                {t('login', 'signupLink')}
               </Link>
             </div>
           </CardContent>
@@ -220,7 +252,7 @@ const Login = () => {
 
         <div className="mt-8 text-center">
           <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
-            ← Voltar ao início
+            {t('login', 'backToHome')}
           </Link>
         </div>
       </div>

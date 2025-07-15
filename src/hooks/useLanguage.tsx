@@ -19,6 +19,7 @@ export const useLanguage = () => {
   useTranslationSection('companies');
   useTranslationSection('footer');
   useTranslationSection('dashboard');
+  useTranslationSection('login');
 
   const t = (key: string): string => {
     // Mapeia as chaves antigas para o novo formato

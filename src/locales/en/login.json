@@ -1,0 +1,37 @@
+
+{
+  "title": "Welcome back!",
+  "subtitle": "Sign in to your account to continue",
+  "loginCard": {
+    "title": "Sign In",
+    "subtitle": "Access your account using email and password or social networks"
+  },
+  "form": {
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "Your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Sign In",
+    "signingIn": "Signing in..."
+  },
+  "social": {
+    "continueWithGoogle": "Continue with Google",
+    "continueWithFacebook": "Continue with Facebook",
+    "or": "or"
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "subtitle": "Enter your email to receive instructions",
+    "cardTitle": "Password Recovery",
+    "cardSubtitle": "We'll send you a link to reset your password",
+    "emailLabel": "Email",
+    "sendButton": "Send Recovery Link",
+    "sending": "Sending...",
+    "backToLogin": "← Back to login"
+  },
+  "noAccount": "Don't have an account?",
+  "signupLink": "Sign up here",
+  "backToHome": "← Back to home"
+}

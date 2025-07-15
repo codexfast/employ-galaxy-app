@@ -1,0 +1,37 @@
+
+{
+  "title": "Bem-vindo de volta!",
+  "subtitle": "Entre na sua conta para continuar",
+  "loginCard": {
+    "title": "Entrar",
+    "subtitle": "Acesse sua conta usando e-mail e senha ou redes sociais"
+  },
+  "form": {
+    "email": "E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "password": "Senha",
+    "passwordPlaceholder": "Sua senha",
+    "rememberMe": "Lembrar de mim",
+    "forgotPassword": "Esqueceu a senha?",
+    "loginButton": "Entrar",
+    "signingIn": "Entrando..."
+  },
+  "social": {
+    "continueWithGoogle": "Continuar com Google",
+    "continueWithFacebook": "Continuar com Facebook",
+    "or": "ou"
+  },
+  "resetPassword": {
+    "title": "Recuperar Senha",
+    "subtitle": "Digite seu e-mail para receber instruções",
+    "cardTitle": "Recuperação de Senha",
+    "cardSubtitle": "Enviaremos um link para redefinir sua senha",
+    "emailLabel": "E-mail",
+    "sendButton": "Enviar Link de Recuperação",
+    "sending": "Enviando...",
+    "backToLogin": "← Voltar ao login"
+  },
+  "noAccount": "Não tem uma conta?",
+  "signupLink": "Cadastre-se aqui",
+  "backToHome": "← Voltar ao início"
+}

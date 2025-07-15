@@ -1,0 +1,37 @@
+
+{
+  "title": "お帰りなさい！",
+  "subtitle": "アカウントにサインインして続行",
+  "loginCard": {
+    "title": "サインイン",
+    "subtitle": "メールとパスワードまたはソーシャルネットワークでアカウントにアクセス"
+  },
+  "form": {
+    "email": "メール",
+    "emailPlaceholder": "your@email.com",
+    "password": "パスワード",
+    "passwordPlaceholder": "パスワード",
+    "rememberMe": "ログイン状態を保持",
+    "forgotPassword": "パスワードを忘れましたか？",
+    "loginButton": "サインイン",
+    "signingIn": "サインイン中..."
+  },
+  "social": {
+    "continueWithGoogle": "Googleで続行",
+    "continueWithFacebook": "Facebookで続行",
+    "or": "または"
+  },
+  "resetPassword": {
+    "title": "パスワードリセット",
+    "subtitle": "メールアドレスを入力して指示を受け取る",
+    "cardTitle": "パスワード復旧",
+    "cardSubtitle": "パスワードをリセットするリンクを送信します",
+    "emailLabel": "メール",
+    "sendButton": "復旧リンクを送信",
+    "sending": "送信中...",
+    "backToLogin": "← ログインに戻る"
+  },
+  "noAccount": "アカウントをお持ちでない方",
+  "signupLink": "こちらからサインアップ",
+  "backToHome": "← ホームに戻る"
+}
