@@ -198,13 +198,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const registerWithGoogle = async (userType: 'candidate' | 'company') => {
     setLoading(true);
     try {
+      // Store the user type in localStorage to be used after OAuth redirect
+      localStorage.setItem('pendingUserType', userType);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/complete-profile`,
-          data: {
-            user_type: userType
-          }
+          redirectTo: `${window.location.origin}/complete-profile`
         }
       });
 
